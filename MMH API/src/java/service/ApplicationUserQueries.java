@@ -5,6 +5,8 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.security.NoSuchAlgorithmException;
 import java.security.MessageDigest;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class ApplicationUserQueries
 {
@@ -55,8 +57,6 @@ public class ApplicationUserQueries
             String SQLQuery = "SELECT Score, Emoticon, Mood "
                     + "FROM MoodScore";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-
-
             String MoodScoreResult = "";
             while (rs.next())
             {
@@ -83,21 +83,22 @@ public class ApplicationUserQueries
         {
             return "Incorrect UserID or Password. Query not executed.";
         }
-        
+      
         try
         {
             /*Gets the last ten music tracks that the user has listened to,
             using the mood after time as the time when the user finished the
             song*/
+
             String SQLQuery = "SELECT DISTINCT TOP (10) SpotifyTrackID, "
-                    + "TrackName, Genre, Artist, Length, MoodAfterTime "
+                    + "TrackName, Genre, Artist, Length, MoodAfterTime, MoodBefore, MoodAfter "
                     + "FROM MusicTrack INNER JOIN UserMood ON "
                     + "MusicTrack.TrackID = UserMood.TrackID " +
                     "WHERE UserMood.UserID = '" + UserID + "' " +
                     "AND MoodAfterTime IS NOT NULL AND MoodBeforeTime IS NOT NULL" +
                     " ORDER BY UserMood.MoodAfterTime DESC";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-
+            
             String MusicResults = "";    
             while (rs.next())
             {
@@ -105,8 +106,10 @@ public class ApplicationUserQueries
                 MusicResults = MusicResults + rs.getString("TrackName") + ",";
                 MusicResults = MusicResults + rs.getString("Genre") + ",";
                 MusicResults = MusicResults + rs.getString("Artist") + ",";
-                MusicResults = MusicResults + rs.getString("Length") + "\n";
-            }          
+                MusicResults = MusicResults + rs.getString("Length") + ",";
+                MusicResults = MusicResults + rs.getString("MoodBefore") + ",";
+                MusicResults = MusicResults + rs.getString("MoodAfter") + "\n";
+            }   
             return MusicResults;           
         }
         catch (SQLException err)
@@ -535,6 +538,103 @@ public class ApplicationUserQueries
             return "";
         }
     }
+
+    public String CheckDiaryDate(String UserID, Statement SQLStatement){
+        Date CurrentDate = new Date();
+        SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String EntryDate = SQLDateFormat.format(CurrentDate);
+        try{
+            String SQLQuery = "SELECT CONVERT(VARCHAR(10), DiaryEntryDate, 120)"
+                    + "AS EntryDates "
+                    + "FROM UserDiary WHERE UserID = '" + UserID + "'";
+            ResultSet rs = SQLStatement.executeQuery(SQLQuery);
+            while (rs.next()){
+                if(EntryDate.equals(rs.getString("EntryDates")))
+                {
+                    return "0";
+                }
+                //dateResult = dateResult + "Dates found: " + rs.getString("EntryDates") + "\n";
+            }
+            return "-1";
+        }
+        catch(SQLException err){
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            System.exit(0);
+            return "-1";
+        }
+    }
+    
+    public String GetDiaryEntry (String UserID, Statement SQLStatement){
+        String diaryEntry = "";
+        Date CurrentDate = new Date();
+        SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        String entryDate = SQLDateFormat.format(CurrentDate);
+        try{
+            String SQLQuery = "SELECT DiaryEntryDate, DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
+                "FROM UserDiary " +
+                "WHERE CONVERT(VARCHAR(10), DiaryEntryDate, 120) = '" + entryDate + "'"
+                + " AND UserID = '" + UserID + "'";
+            ResultSet rs = SQLStatement.executeQuery(SQLQuery);
+            while (rs.next()){
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryDate") + "\n";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "\n";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "\n";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "\n";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "\n";
+            }
+            return diaryEntry;
+        }
+        catch(SQLException err){
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            System.exit(0);
+            return "-1";
+        }        
+    }
+
+    public String UpdateDiaryEntry (String UserID, String DiaryEntryOne, 
+            String DiaryEntryTwo, String DiaryEntryThree, 
+            String DiaryEntryFour, Statement SQLStatement){
+        try{
+            String SQLQuery = "UPDATE UserDiary "
+                    + "SET DiaryEntryOne = '"+DiaryEntryOne+"' "
+                    + "DiaryEntryTwo = '"+DiaryEntryTwo+"' "
+                    + "DiaryEntryThree = '"+DiaryEntryThree+"' "
+                    + "DiaryEntryFour = '"+DiaryEntryFour+"' "
+                    + "WHERE UserID = '"+UserID+"' ";
+            SQLStatement.execute(SQLQuery);
+            return "Update successful";
+        }
+        catch(SQLException err){
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            System.exit(0);
+            return "";
+        }
+    }
+    
+    public String SetDiaryEntry (String UserID, String DiaryEntryOne, 
+            String DiaryEntryTwo, String DiaryEntryThree, 
+            String DiaryEntryFour, Statement SQLStatement){
+        Date CurrentDate = new Date();       
+        SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String EntryDate = SQLDateFormat.format(CurrentDate);            
+        try{
+            String SQLQuery = "INSERT INTO UserDiary (UserID, DiaryEntryDate, "
+                    + "DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour)"
+                    + " VALUES ('" + UserID + "', '" + EntryDate + "', '" + DiaryEntryOne + 
+                    "', '" + DiaryEntryTwo + "', '" + DiaryEntryThree + "', '" + DiaryEntryFour + "');";
+            SQLStatement.execute(SQLQuery);
+            return "Success";
+        }
+        catch(SQLException err){
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            System.exit(0);
+            return "";
+        }
+    }
     
     public String VerifyLogin(String EmailAddress, String UserPassword,
             Statement SQLStatement)
@@ -590,4 +690,5 @@ public class ApplicationUserQueries
             return false;
         }
     }
+    
 }

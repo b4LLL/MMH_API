@@ -58,8 +58,7 @@ public class RunServerInterface
     {
         //In case the file read fails.
         String DefaultConnectionString =
-                "jdbc:sqlserver://PE-KS1807\\SQLEXPRESS:1433;databasename=" +
-                "MFMHDatabase_UAT;user=TestUser;password=P@ssw0rd1;";
+                "jdbc:sqlserver://137.154.147.62\\PE-KS1807\\SQLEXPRESS:1433;databaseName=MFMHDatabase_UAT";
         
         //The name of the file to open. Note this is the following directory:
         //...\Glassfish\glassfish4\glassfish\domains\MMH\config\
@@ -127,6 +126,7 @@ public class RunServerInterface
     public static String ConnectToServer(String QueryName, String[] QueryContents)
     {
         String Result = "";
+        String[] arrayResult;
         
          /*First try loading the drivers that connect to the server*/
         try
@@ -249,6 +249,24 @@ public class RunServerInterface
                         Result = UserQuery.VerifyLogin(QueryContents[0],
                                 QueryContents[1], SQLStatement);
                     break;
+                case "SetDiaryEntry":
+                    Result = UserQuery.SetDiaryEntry(QueryContents[0], 
+                            QueryContents[1], QueryContents[2], 
+                            QueryContents[3], QueryContents[4], 
+                            SQLStatement);
+                    break;
+                case "UpdateDiaryEntry":
+                    Result = UserQuery.SetDiaryEntry(QueryContents[0], 
+                            QueryContents[1], QueryContents[2], 
+                            QueryContents[3], QueryContents[4], 
+                            SQLStatement);
+                    break;
+                case "GetDiaryEntry":
+                    Result = UserQuery.GetDiaryEntry(QueryContents[0], SQLStatement);
+                    break;
+                case "CheckDiaryDate":
+                    Result = UserQuery.CheckDiaryDate(QueryContents[0], SQLStatement);
+                    break;
                 case "VerifyPassword":
                         Result = UserQuery.VerifyPassword(
                                 QueryContents[0], QueryContents[1], SQLStatement);
@@ -257,7 +275,6 @@ public class RunServerInterface
                     Result = "Invalid query name!";
                     break;
             }
-            
             DatabaseConnection.close();           
         }
         catch (SQLException err)

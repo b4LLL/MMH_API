@@ -28,6 +28,8 @@ import javax.ws.rs.core.MediaType;
 @Path("mmhpackage.userdiary")
 public class UserDiaryFacadeREST extends AbstractFacade<UserDiary> {
 
+    RunServerInterface ServerInterface = new RunServerInterface();
+
     @PersistenceContext(unitName = "MMH_APIPU")
     private EntityManager em;
 
@@ -88,4 +90,71 @@ public class UserDiaryFacadeREST extends AbstractFacade<UserDiary> {
         return em;
     }
     
+    @GET
+    @Path("SetDiaryEntry/{UserID}/{DiaryEntryOne}/{DiaryEntryTwo}/{DiaryEntryThree}/{DiaryEntryFour}")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public String SetDiaryEntry(@PathParam("UserID") String UserID,
+                @PathParam("DiaryEntryOne") String DiaryEntryOne,
+                @PathParam("DiaryEntryTwo") String DiaryEntryTwo,
+                @PathParam("DiaryEntryThree") String DiaryEntryThree,
+                @PathParam("DiaryEntryFour") String DiaryEntryFour)
+    {
+        String[] Parameters = new String[6];
+        Parameters[0] = UserID;
+        Parameters[1] = DiaryEntryOne;
+        Parameters[2] = DiaryEntryTwo;
+        Parameters[3] = DiaryEntryThree;
+        Parameters[4] = DiaryEntryFour;
+        Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
+        Parameters[1] = ServerInterface.SanitiseURL(Parameters[1]);
+        Parameters[2] = ServerInterface.SanitiseURL(Parameters[2]);
+        Parameters[3] = ServerInterface.SanitiseURL(Parameters[3]);
+        Parameters[4] = ServerInterface.SanitiseURL(Parameters[4]);
+        return ServerInterface.ConnectToServer("SetDiaryEntry", Parameters);
+    }
+
+    @GET
+    @Path("UpdateDiaryEntry/{UserID}/{DiaryEntryOne}/{DiaryEntryTwo}/{DiaryEntryThree}/{DiaryEntryFour}")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public String UpdateDiaryEntry(@PathParam("UserID") String UserID,
+                @PathParam("DiaryEntryOne") String DiaryEntryOne,
+                @PathParam("DiaryEntryTwo") String DiaryEntryTwo,
+                @PathParam("DiaryEntryThree") String DiaryEntryThree,
+                @PathParam("DiaryEntryFour") String DiaryEntryFour)
+    {
+        String[] Parameters = new String[6];
+        Parameters[0] = UserID;
+        Parameters[1] = DiaryEntryOne;
+        Parameters[2] = DiaryEntryTwo;
+        Parameters[3] = DiaryEntryThree;
+        Parameters[4] = DiaryEntryFour;
+        Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
+        Parameters[1] = ServerInterface.SanitiseURL(Parameters[1]);
+        Parameters[2] = ServerInterface.SanitiseURL(Parameters[2]);
+        Parameters[3] = ServerInterface.SanitiseURL(Parameters[3]);
+        Parameters[4] = ServerInterface.SanitiseURL(Parameters[4]);
+        return ServerInterface.ConnectToServer("SetDiaryEntry", Parameters);
+    }
+    
+    @GET
+    @Path("GetDiaryEntry/{UserID}")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public String GetDiaryEntry(@PathParam("UserID") String UserID)
+    {
+        String[] Parameters = new String[1];
+        Parameters[0] = UserID;
+        Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
+        return ServerInterface.ConnectToServer("GetDiaryEntry", Parameters);
+    }
+    
+    @GET
+    @Path("CheckDiaryDate/{UserID}")
+    @Produces({MediaType.TEXT_PLAIN})
+    public String CheckDiaryDate(@PathParam("UserID") String UserID)
+    {
+        String[] Parameters = new String[1];
+        Parameters[0] = UserID;
+        Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);    
+        return ServerInterface.ConnectToServer("CheckDiaryDate", Parameters);
+    }
 }

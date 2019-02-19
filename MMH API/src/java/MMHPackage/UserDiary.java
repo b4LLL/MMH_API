@@ -32,7 +32,11 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "UserDiary.findByUserDiaryID", query = "SELECT u FROM UserDiary u WHERE u.userDiaryID = :userDiaryID"),
     @NamedQuery(name = "UserDiary.findByUserID", query = "SELECT u FROM UserDiary u WHERE u.userID = :userID"),
     @NamedQuery(name = "UserDiary.findByDiaryEntryDate", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryDate = :diaryEntryDate"),
-    @NamedQuery(name = "UserDiary.findByDiaryEntryText", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryText = :diaryEntryText")})
+    @NamedQuery(name = "UserDiary.findByDiaryEntryOne", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryOne = :diaryEntryOne"),
+    @NamedQuery(name = "UserDiary.findByDiaryEntryTwo", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryTwo = :diaryEntryTwo"),
+    @NamedQuery(name = "UserDiary.findByDiaryEntryThree", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryThree = :diaryEntryThree"),
+    @NamedQuery(name = "UserDiary.findByDiaryEntryFour", query = "SELECT u FROM UserDiary u WHERE u.diaryEntryFour = :diaryEntryFour")
+})
 public class UserDiary implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,8 +51,17 @@ public class UserDiary implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date diaryEntryDate;
     @Size(max = 2000)
-    @Column(name = "DiaryEntryText")
-    private String diaryEntryText;
+    @Column(name = "DiaryEntryOne")
+    private String diaryEntryOne;
+    @Size(max = 2000)
+    @Column(name = "DiaryEntryTwo")
+    private String diaryEntryTwo;
+    @Size(max = 2000)
+    @Column(name = "DiaryEntryThree")
+    private String diaryEntryThree;
+    @Size(max = 2000)
+    @Column(name = "DiaryEntryFour")
+    private String diaryEntryFour;
 
     public UserDiary() {
     }
@@ -82,11 +95,27 @@ public class UserDiary implements Serializable {
     }
 
     public String getDiaryEntryText() {
-        return diaryEntryText;
+        return "Diary Entry 1:\t" + diaryEntryOne + "\nDiary Entry 2:\t" + diaryEntryTwo + "\nDiary Entry 3:\t" + diaryEntryThree + "\nDiary Entry 4:\t" + diaryEntryFour;
     }
 
-    public void setDiaryEntryText(String diaryEntryText) {
-        this.diaryEntryText = diaryEntryText;
+    public void setDiaryEntryOne(String diaryEntryOne) {
+        this.diaryEntryOne = diaryEntryOne;
+    }
+    
+    public void setDiaryEntryTwo(String diaryEntryTwo) {
+        this.diaryEntryTwo = diaryEntryTwo;
+    }
+        
+    public void setDiaryEntryThree(String diaryEntryThree) {
+        this.diaryEntryThree = diaryEntryThree;
+    }
+            
+    public void setDiaryEntryFour(String diaryEntryFour) {
+        this.diaryEntryFour = diaryEntryFour;
+    }
+    
+    public void setDiaryEntryFive(String diaryEntryFive) {
+        this.diaryEntryFour = diaryEntryFour;
     }
 
     @Override
