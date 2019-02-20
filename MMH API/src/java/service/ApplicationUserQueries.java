@@ -542,20 +542,17 @@ public class ApplicationUserQueries
     public String CheckDiaryDate(String UserID, Statement SQLStatement){
         Date CurrentDate = new Date();
         SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String EntryDate = SQLDateFormat.format(CurrentDate);
+        String nowDate = SQLDateFormat.format(CurrentDate);
+        String userDiaryID = "-1";
         try{
-            String SQLQuery = "SELECT CONVERT(VARCHAR(10), DiaryEntryDate, 120)"
-                    + "AS EntryDates "
-                    + "FROM UserDiary WHERE UserID = '" + UserID + "'";
+            String SQLQuery = "SELECT MAX(UserDiaryID) "
+                    + "AS UserDiaryID "
+                    + "FROM UserDiary "
+                    + "WHERE CONVERT(VARCHAR(10), DiaryEntryDate, 120) = '" + nowDate + "' AND UserID = '" + UserID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-            while (rs.next()){
-                if(EntryDate.equals(rs.getString("EntryDates")))
-                {
-                    return "0";
-                }
-                //dateResult = dateResult + "Dates found: " + rs.getString("EntryDates") + "\n";
-            }
-            return "-1";
+            if(rs.next())
+                userDiaryID = rs.getString("UserDiaryID");
+            return userDiaryID;
         }
         catch(SQLException err){
             System.err.println("Error executing query");
@@ -565,19 +562,14 @@ public class ApplicationUserQueries
         }
     }
     
-    public String GetDiaryEntry (String UserID, Statement SQLStatement){
+    public String GetDiaryEntry (String UserDiaryID, Statement SQLStatement){
         String diaryEntry = "";
-        Date CurrentDate = new Date();
-        SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        String entryDate = SQLDateFormat.format(CurrentDate);
         try{
-            String SQLQuery = "SELECT DiaryEntryDate, DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
+            String SQLQuery = "SELECT DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
                 "FROM UserDiary " +
-                "WHERE CONVERT(VARCHAR(10), DiaryEntryDate, 120) = '" + entryDate + "'"
-                + " AND UserID = '" + UserID + "'";
+                "WHERE UserDiaryID = '" + UserDiaryID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-            while (rs.next()){
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryDate") + "\n";
+            if(rs.next()){
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "\n";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "\n";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "\n";
@@ -593,7 +585,7 @@ public class ApplicationUserQueries
         }        
     }
 
-    public String UpdateDiaryEntry (String UserID, String DiaryEntryOne, 
+    public String UpdateDiaryEntry (String UserDiaryID, String DiaryEntryOne, 
             String DiaryEntryTwo, String DiaryEntryThree, 
             String DiaryEntryFour, Statement SQLStatement){
         try{
@@ -602,7 +594,7 @@ public class ApplicationUserQueries
                     + "DiaryEntryTwo = '"+DiaryEntryTwo+"' "
                     + "DiaryEntryThree = '"+DiaryEntryThree+"' "
                     + "DiaryEntryFour = '"+DiaryEntryFour+"' "
-                    + "WHERE UserID = '"+UserID+"' ";
+                    + "WHERE UserDiaryID = '"+UserDiaryID+"' ";
             SQLStatement.execute(SQLQuery);
             return "Update successful";
         }
