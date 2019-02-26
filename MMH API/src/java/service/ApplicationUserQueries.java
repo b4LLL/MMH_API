@@ -8,6 +8,7 @@ import java.security.MessageDigest;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+
 public class ApplicationUserQueries
 {
     /*Note that the password encryption code below is not used on the server
@@ -543,16 +544,18 @@ public class ApplicationUserQueries
         Date CurrentDate = new Date();
         SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String nowDate = SQLDateFormat.format(CurrentDate);
-        String userDiaryID = "-1";
+        String userDiaryID = "";
         try{
             String SQLQuery = "SELECT MAX(UserDiaryID) "
                     + "AS UserDiaryID "
                     + "FROM UserDiary "
                     + "WHERE CONVERT(VARCHAR(10), DiaryEntryDate, 120) = '" + nowDate + "' AND UserID = '" + UserID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-            if(rs.next())
+            while(rs.next()){
                 userDiaryID = rs.getString("UserDiaryID");
-            return userDiaryID;
+                return userDiaryID;
+            }
+            return "-1";
         }
         catch(SQLException err){
             System.err.println("Error executing query");
@@ -570,10 +573,10 @@ public class ApplicationUserQueries
                 "WHERE UserDiaryID = '" + UserDiaryID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
             if(rs.next()){
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "\n";
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "\n";
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "\n";
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "\n";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "@@@";
             }
             return diaryEntry;
         }
@@ -585,16 +588,21 @@ public class ApplicationUserQueries
         }        
     }
 
-    public String UpdateDiaryEntry (String UserDiaryID, String DiaryEntryOne, 
-            String DiaryEntryTwo, String DiaryEntryThree, 
+    public String UpdateDiaryEntry (String UserDiaryID, String UserID,
+            String DiaryEntryOne, String DiaryEntryTwo, String DiaryEntryThree, 
             String DiaryEntryFour, Statement SQLStatement){
+        Date CurrentDate = new Date();       
+        SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String EntryDate = SQLDateFormat.format(CurrentDate);
         try{
             String SQLQuery = "UPDATE UserDiary "
-                    + "SET DiaryEntryOne = '"+DiaryEntryOne+"' "
-                    + "DiaryEntryTwo = '"+DiaryEntryTwo+"' "
-                    + "DiaryEntryThree = '"+DiaryEntryThree+"' "
+                    + "SET DiaryEntryDate = '"+EntryDate+"', "
+                    + "DiaryEntryOne = '"+DiaryEntryOne+"', "
+                    + "DiaryEntryTwo = '"+DiaryEntryTwo+"', "
+                    + "DiaryEntryThree = '"+DiaryEntryThree+"', "
                     + "DiaryEntryFour = '"+DiaryEntryFour+"' "
-                    + "WHERE UserDiaryID = '"+UserDiaryID+"' ";
+                    + "WHERE UserDiaryID = '"+UserDiaryID+"' "
+                    + "AND UserID = '"+UserID+"'";
             SQLStatement.execute(SQLQuery);
             return "Update successful";
         }
@@ -602,7 +610,7 @@ public class ApplicationUserQueries
             System.err.println("Error executing query");
             err.printStackTrace(System.err);
             System.exit(0);
-            return "";
+            return "Error";
         }
     }
     

@@ -99,7 +99,7 @@ public class UserDiaryFacadeREST extends AbstractFacade<UserDiary> {
                 @PathParam("DiaryEntryThree") String DiaryEntryThree,
                 @PathParam("DiaryEntryFour") String DiaryEntryFour)
     {
-        String[] Parameters = new String[6];
+        String[] Parameters = new String[5];
         Parameters[0] = UserID;
         Parameters[1] = DiaryEntryOne;
         Parameters[2] = DiaryEntryTwo;
@@ -114,26 +114,29 @@ public class UserDiaryFacadeREST extends AbstractFacade<UserDiary> {
     }
 
     @GET
-    @Path("UpdateDiaryEntry/{UserID}/{DiaryEntryOne}/{DiaryEntryTwo}/{DiaryEntryThree}/{DiaryEntryFour}")
+    @Path("UpdateDiaryEntry/{UserDiaryID}/{UserID}/{DiaryEntryOne}/{DiaryEntryTwo}/{DiaryEntryThree}/{DiaryEntryFour}")
     @Produces({ MediaType.TEXT_PLAIN })
-    public String UpdateDiaryEntry(@PathParam("UserID") String UserID,
+    public String UpdateDiaryEntry(@PathParam("UserDiaryID") String UserDiaryID,
+                @PathParam("UserID") String UserID,
                 @PathParam("DiaryEntryOne") String DiaryEntryOne,
                 @PathParam("DiaryEntryTwo") String DiaryEntryTwo,
                 @PathParam("DiaryEntryThree") String DiaryEntryThree,
                 @PathParam("DiaryEntryFour") String DiaryEntryFour)
     {
         String[] Parameters = new String[6];
-        Parameters[0] = UserID;
-        Parameters[1] = DiaryEntryOne;
-        Parameters[2] = DiaryEntryTwo;
-        Parameters[3] = DiaryEntryThree;
-        Parameters[4] = DiaryEntryFour;
+        Parameters[0] = UserDiaryID;
+        Parameters[1] = UserID;
+        Parameters[2] = DiaryEntryOne;
+        Parameters[3] = DiaryEntryTwo;
+        Parameters[4] = DiaryEntryThree;
+        Parameters[5] = DiaryEntryFour;
         Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
         Parameters[1] = ServerInterface.SanitiseURL(Parameters[1]);
         Parameters[2] = ServerInterface.SanitiseURL(Parameters[2]);
         Parameters[3] = ServerInterface.SanitiseURL(Parameters[3]);
         Parameters[4] = ServerInterface.SanitiseURL(Parameters[4]);
-        return ServerInterface.ConnectToServer("SetDiaryEntry", Parameters);
+        Parameters[5] = ServerInterface.SanitiseURL(Parameters[5]);
+        return ServerInterface.ConnectToServer("UpdateDiaryEntry", Parameters);
     }
     
     @GET
