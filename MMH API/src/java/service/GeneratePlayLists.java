@@ -1048,7 +1048,7 @@ public class GeneratePlayLists
         {
             UserEnterMoodAfter(MoodIDNum, AfterMood, UserLiked, DiaryEntryOne,
                     DiaryEntryTwo, DiaryEntryThree, SQLStatement);
-            return Integer.toString(MoodIDNum);
+            return "MoodID " + MoodID;
         }
         else
         {
