@@ -267,8 +267,11 @@ public class RunServerInterface
                     Result = UserQuery.CheckDiaryDate(QueryContents[0], SQLStatement);
                     break;
                 case "VerifyPassword":
-                        Result = UserQuery.VerifyPassword(
-                                QueryContents[0], QueryContents[1], SQLStatement);
+                    Result = UserQuery.VerifyPassword(
+                            QueryContents[0], QueryContents[1], SQLStatement);
+                    break;
+                case "LoadCalendar":
+                    Result = UserQuery.LoadCalendar(QueryContents[0], SQLStatement);
                     break;
                 default:
                     Result = "Invalid query name!";

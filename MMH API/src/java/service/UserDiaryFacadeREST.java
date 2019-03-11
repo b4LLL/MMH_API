@@ -149,6 +149,17 @@ public class UserDiaryFacadeREST extends AbstractFacade<UserDiary> {
         Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
         return ServerInterface.ConnectToServer("GetDiaryEntry", Parameters);
     }
+
+    @GET
+    @Path("LoadCalendar/{UserID}")
+    @Produces({ MediaType.TEXT_PLAIN })
+    public String LoadCalendar(@PathParam("UserID") String UserID)
+    {
+        String[] Parameters = new String[1];
+        Parameters[0] = UserID;
+        Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
+        return ServerInterface.ConnectToServer("LoadCalendar", Parameters);
+    }
     
     @GET
     @Path("CheckDiaryDate/{UserID}")

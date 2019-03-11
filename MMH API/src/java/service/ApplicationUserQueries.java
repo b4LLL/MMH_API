@@ -588,6 +588,30 @@ public class ApplicationUserQueries
         }        
     }
 
+    public String LoadCalendar (String UserID, Statement SQLStatement){
+        String diaryEntry = "";
+        try{
+            String SQLQuery = "SELECT DiaryEntryDate, DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
+                "FROM UserDiary " +
+                "WHERE UserID = '" + UserID + "'";
+            ResultSet rs = SQLStatement.executeQuery(SQLQuery);
+            while(rs.next()){
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryDate") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "\f";
+            }
+            return diaryEntry;
+        }
+        catch(SQLException err){
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            System.exit(0);
+            return "-1";
+        }        
+    }
+    
     public String UpdateDiaryEntry (String UserDiaryID, String UserID,
             String DiaryEntryOne, String DiaryEntryTwo, String DiaryEntryThree, 
             String DiaryEntryFour, Statement SQLStatement){
