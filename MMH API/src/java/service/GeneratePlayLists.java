@@ -942,18 +942,14 @@ public class GeneratePlayLists
                 SQLQuery = "SELECT MoodBefore, TrackID FROM UserMood WHERE "
                         + "MoodID = " + "'" +
                         MoodID + "'";
-
                  rs = SQLStatement.executeQuery(SQLQuery);
-
                  String BeforeMood = "";
                  int TrackID = -1;
-
                  if (rs.next())
                  {
                     BeforeMood = rs.getString("MoodBefore");
                     TrackID = Integer.parseInt(rs.getString("TrackID"));
                  }
-                 
                 /*System gets current Date/Time, AfterMood, UserLiked, MoodID
                 and updates the UserMood database table with these parameters
                 where MoodID matches.*/
@@ -975,31 +971,27 @@ public class GeneratePlayLists
                 Note this is a cummulative score for all users.*/
                 SQLQuery = "UPDATE MusicTrack SET TotalMoodScore = "
                         + "TotalMoodScore + " + ScoreDiff + ", "
-                        + "NumberOfTimesListened =  NumberOfTimesListened + 1 "
+                        + "NumberOfTimesListened = NumberOfTimesListened + 1 "
                         + "WHERE TrackID = "
                         + TrackID;
-                
                 SQLStatement.execute(SQLQuery);
-
                 /*Only make a diary entry if the user has entered text in at
-                    least one question.*/
+                    least one question.
+                REMOVED: CAUSING NETWORK TIMEOUT
                 if (!DiaryEntryOne.equals("") || !DiaryEntryTwo.equals("") ||
                         !DiaryEntryThree.equals(""))
                 {
                     //Get the time the user made the diary entry.
                     CurrentDate = new Date();          
                     String DiaryEntryTime = SQLDateFormat.format(CurrentDate);
-
                     SQLQuery = "INSERT INTO UserDiary (UserID, DiaryEntryDate, "
                             + "DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree)\n" +
                             "VALUES('" + UserID + "', '" + DiaryEntryTime +
                             "', '" + DiaryEntryOne +"', '" + DiaryEntryTwo + "', '"
                             + DiaryEntryThree + "')";
-                    
                     SQLStatement.execute(SQLQuery);
                 }
-                
-                AddTracksToPlaylist(UserID, SQLStatement);                
+                AddTracksToPlaylist(UserID, SQLStatement;*/
                 rs.close();
                 return true;
             }
