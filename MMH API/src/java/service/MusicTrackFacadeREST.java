@@ -138,11 +138,12 @@ public class MusicTrackFacadeREST extends AbstractFacade<MusicTrack>
     }
     
     @GET
-    @Path("TrackStarted/{SpotifyTrackID}/{TrackName}/{Genre}/{Artist}/{Length}/"
+    @Path("TrackStarted/{SpotifyTrackID}/{SpotifyImageID}/{TrackName}/{Genre}/{Artist}/{Length}/"
             + "{BeforeMood}/{UserID}/{UserPassword}")
     @Produces({ MediaType.TEXT_PLAIN })
     public String TrackStarted(
             @PathParam("SpotifyTrackID") String SpotifyTrackID,
+            @PathParam("SpotifyImageID") String SpotifyImageID,
             @PathParam("TrackName") String TrackName,
             @PathParam("Genre") String Genre,
             @PathParam("Artist") String Artist,
@@ -151,15 +152,16 @@ public class MusicTrackFacadeREST extends AbstractFacade<MusicTrack>
             @PathParam("UserID") String UserID,
             @PathParam("UserPassword") String UserPassword)
     {
-        String[] Parameters = new String[8];
+        String[] Parameters = new String[9];
         Parameters[0] = SpotifyTrackID;
-        Parameters[1] = TrackName;
-        Parameters[2] = Genre;
-        Parameters[3] = Artist;
-        Parameters[4] = Length;
-        Parameters[5] = BeforeMood;
-        Parameters[6] = UserID;
-        Parameters[7] = UserPassword;
+        Parameters[1] = SpotifyImageID;
+        Parameters[2] = TrackName;
+        Parameters[3] = Genre;
+        Parameters[4] = Artist;
+        Parameters[5] = Length;
+        Parameters[6] = BeforeMood;
+        Parameters[7] = UserID;
+        Parameters[8] = UserPassword;
         
         Parameters[0] = ServerInterface.SanitiseURL(Parameters[0]);
         Parameters[1] = ServerInterface.SanitiseURL(Parameters[1]);
@@ -169,6 +171,7 @@ public class MusicTrackFacadeREST extends AbstractFacade<MusicTrack>
         Parameters[5] = ServerInterface.SanitiseURL(Parameters[5]);
         Parameters[6] = ServerInterface.SanitiseURL(Parameters[6]);
         Parameters[7] = ServerInterface.SanitiseURL(Parameters[7]);
+        Parameters[8] = ServerInterface.SanitiseURL(Parameters[8]);
         
         return ServerInterface.ConnectToServer("TrackStarted", Parameters);
     }

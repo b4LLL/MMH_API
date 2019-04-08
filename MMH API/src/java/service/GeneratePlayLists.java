@@ -9,7 +9,7 @@ import java.util.Date;
 
 public class GeneratePlayLists
 {
-    private static int AddTrack(String SpotifyTrackID, String TrackName,
+    private static int AddTrack(String SpotifyTrackID, String SpotifyImageID, String TrackName,
             String Genre, String Artist, String Length, Statement SQLStatement)
     {
         try
@@ -34,10 +34,10 @@ public class GeneratePlayLists
                 NumberOfTimesListened as 1*/
                 SQLQuery = "SET NOCOUNT ON; INSERT INTO MusicTrack (TrackName, "
                         + "Genre, Artist, Length, NumberOfTimesListened, "
-                        + "SpotifyTrackID)\n" +
+                        + "SpotifyTrackID, SpotifyImageID)\n" +
                         "VALUES('" + TrackName + "', '" + Genre + "', '" +
                         Artist + "', '" + Length + "', " + 1 + ", '" +
-                        SpotifyTrackID + "'); "
+                        SpotifyTrackID + "', '" + SpotifyImageID + "'); "
                         + "SELECT SCOPE_IDENTITY() AS NewTrackID";
                 
                 rs = SQLStatement.executeQuery(SQLQuery);
@@ -1005,8 +1005,8 @@ public class GeneratePlayLists
         }
     }
 
-    public static String TrackStarted(String SpotifyTrackID, String TrackName,
-            String Genre, String Artist, String Length, String BeforeMood,
+    public static String TrackStarted(String SpotifyTrackID, String SpotifyImageID, 
+            String TrackName, String Genre, String Artist, String Length, String BeforeMood,
             String UserID, String UserPassword, Statement SQLStatement)
     {
         ApplicationUserQueries User = new ApplicationUserQueries();
@@ -1016,7 +1016,7 @@ public class GeneratePlayLists
             return "Incorrect UserID or Password. Query not executed.";
         }
         
-        int TrackID = AddTrack(SpotifyTrackID, TrackName, Genre, Artist, Length,
+        int TrackID = AddTrack(SpotifyTrackID, SpotifyImageID, TrackName, Genre, Artist, Length,
                 SQLStatement);
         String MoodID = UserEnterMoodBefore(UserID, TrackID, BeforeMood,
                 SQLStatement);

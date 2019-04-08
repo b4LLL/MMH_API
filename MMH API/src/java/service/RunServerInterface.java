@@ -168,7 +168,8 @@ public class RunServerInterface
                             QueryContents[1], QueryContents[2],
                             QueryContents[3], QueryContents[4],
                             QueryContents[5], QueryContents[6],
-                            QueryContents[7], SQLStatement);                           
+                            QueryContents[7], QueryContents[8],
+                            SQLStatement);                           
                     break;
                 case "TrackEnded":
                     Result = Playlist.TrackEnded(QueryContents[0],

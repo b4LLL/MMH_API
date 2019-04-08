@@ -92,7 +92,7 @@ public class ApplicationUserQueries
             song*/
 
             String SQLQuery = "SELECT DISTINCT TOP (10) SpotifyTrackID, "
-                    + "TrackName, Genre, Artist, Length, MoodAfterTime, MoodBefore, MoodAfter "
+                    + "SpotifyImageID, TrackName, Genre, Artist, Length, MoodAfterTime, MoodBefore, MoodAfter "
                     + "FROM MusicTrack INNER JOIN UserMood ON "
                     + "MusicTrack.TrackID = UserMood.TrackID " +
                     "WHERE UserMood.UserID = '" + UserID + "' " +
@@ -104,6 +104,7 @@ public class ApplicationUserQueries
             while (rs.next())
             {
                 MusicResults = MusicResults + rs.getString("SpotifyTrackID") + ",";
+                MusicResults = MusicResults + rs.getString("SpotifyImageID") + ",";
                 MusicResults = MusicResults + rs.getString("TrackName") + ",";
                 MusicResults = MusicResults + rs.getString("Genre") + ",";
                 MusicResults = MusicResults + rs.getString("Artist") + ",";
