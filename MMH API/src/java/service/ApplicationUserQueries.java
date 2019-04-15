@@ -569,7 +569,7 @@ public class ApplicationUserQueries
     public String GetDiaryEntry (String UserDiaryID, Statement SQLStatement){
         String diaryEntry = "";
         try{
-            String SQLQuery = "SELECT DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
+            String SQLQuery = "SELECT DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour, Outcome " +
                 "FROM UserDiary " +
                 "WHERE UserDiaryID = '" + UserDiaryID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
@@ -578,6 +578,7 @@ public class ApplicationUserQueries
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "@@@";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "@@@";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("Outcome") + "@@@";
             }
             return diaryEntry;
         }
@@ -592,7 +593,7 @@ public class ApplicationUserQueries
     public String LoadCalendar (String UserID, Statement SQLStatement){
         String diaryEntry = "";
         try{
-            String SQLQuery = "SELECT DiaryEntryDate, DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour " +
+            String SQLQuery = "SELECT DiaryEntryDate, DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour, Outcome " +
                 "FROM UserDiary " +
                 "WHERE UserID = '" + UserID + "'";
             ResultSet rs = SQLStatement.executeQuery(SQLQuery);
@@ -601,7 +602,8 @@ public class ApplicationUserQueries
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryOne") + "@@@";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryTwo") + "@@@";
                 diaryEntry = diaryEntry + rs.getString("DiaryEntryThree") + "@@@";
-                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "\f";
+                diaryEntry = diaryEntry + rs.getString("DiaryEntryFour") + "@@@";
+                diaryEntry = diaryEntry + rs.getString("Outcome") + "\f";
             }
             return diaryEntry;
         }
@@ -613,9 +615,10 @@ public class ApplicationUserQueries
         }        
     }
     
+    //used for update only
     public String UpdateDiaryEntry (String UserDiaryID, String UserID,
             String DiaryEntryOne, String DiaryEntryTwo, String DiaryEntryThree, 
-            String DiaryEntryFour, Statement SQLStatement){
+            String DiaryEntryFour, String Outcome, Statement SQLStatement){
         Date CurrentDate = new Date();       
         SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String EntryDate = SQLDateFormat.format(CurrentDate);
@@ -625,7 +628,8 @@ public class ApplicationUserQueries
                     + "DiaryEntryOne = '"+DiaryEntryOne+"', "
                     + "DiaryEntryTwo = '"+DiaryEntryTwo+"', "
                     + "DiaryEntryThree = '"+DiaryEntryThree+"', "
-                    + "DiaryEntryFour = '"+DiaryEntryFour+"' "
+                    + "DiaryEntryFour = '"+DiaryEntryFour+"', "
+                    + "Outcome = '"+Outcome+"' "
                     + "WHERE UserDiaryID = '"+UserDiaryID+"' "
                     + "AND UserID = '"+UserID+"'";
             SQLStatement.execute(SQLQuery);
@@ -639,17 +643,18 @@ public class ApplicationUserQueries
         }
     }
     
+    //used for first entry
     public String SetDiaryEntry (String UserID, String DiaryEntryOne, 
             String DiaryEntryTwo, String DiaryEntryThree, 
-            String DiaryEntryFour, Statement SQLStatement){
+            String DiaryEntryFour, String Outcome, Statement SQLStatement){
         Date CurrentDate = new Date();       
         SimpleDateFormat SQLDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         String EntryDate = SQLDateFormat.format(CurrentDate);            
         try{
             String SQLQuery = "INSERT INTO UserDiary (UserID, DiaryEntryDate, "
-                    + "DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour)"
+                    + "DiaryEntryOne, DiaryEntryTwo, DiaryEntryThree, DiaryEntryFour, Outcome)"
                     + " VALUES ('" + UserID + "', '" + EntryDate + "', '" + DiaryEntryOne + 
-                    "', '" + DiaryEntryTwo + "', '" + DiaryEntryThree + "', '" + DiaryEntryFour + "');";
+                    "', '" + DiaryEntryTwo + "', '" + DiaryEntryThree + "', '"  + DiaryEntryFour + "', '" + Outcome + "');";
             SQLStatement.execute(SQLQuery);
             return "Success";
         }

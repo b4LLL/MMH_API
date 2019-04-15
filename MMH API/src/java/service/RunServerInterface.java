@@ -253,13 +253,13 @@ public class RunServerInterface
                 case "SetDiaryEntry":
                     Result = UserQuery.SetDiaryEntry(QueryContents[0], 
                             QueryContents[1], QueryContents[2], 
-                            QueryContents[3], QueryContents[4], SQLStatement);
+                            QueryContents[3], QueryContents[4], QueryContents[5], SQLStatement);
                     break;
                 case "UpdateDiaryEntry":
                     Result = UserQuery.UpdateDiaryEntry(QueryContents[0], 
                             QueryContents[1], QueryContents[2], 
                             QueryContents[3], QueryContents[4], QueryContents[5],
-                            SQLStatement);
+                            QueryContents[6], SQLStatement);
                     break;
                 case "GetDiaryEntry":
                     Result = UserQuery.GetDiaryEntry(QueryContents[0], SQLStatement);
