@@ -9,55 +9,6 @@ import java.util.Date;
 
 public class GeneratePlayLists
 {
-    private static int AddTrack(String SpotifyTrackID, String SpotifyImageID, String TrackName,
-            String Genre, String Artist, String Length, Statement SQLStatement)
-    {
-        try
-        {
-            /*Verify that we haven't already inserted this record before.
-            If we have then just get the ID*/
-            String SQLQuery = "SELECT TrackID FROM MusicTrack WHERE TrackName = '"
-                    + TrackName + "'" ;
-            ResultSet rs = SQLStatement.executeQuery(SQLQuery);
-        
-            String TrackIDString = "-1";
-            if (rs.next())
-            {
-                TrackIDString = rs.getString("TrackID");
-            }    
-        
-            int TrackID = Integer.parseInt(TrackIDString);
-            if (TrackID == -1)
-            {
-                /*Create a new record in the MusicTrack table and get back the
-                ID of the newly inserted record. Set the
-                NumberOfTimesListened as 1*/
-                SQLQuery = "SET NOCOUNT ON; INSERT INTO MusicTrack (TrackName, "
-                        + "Genre, Artist, Length, NumberOfTimesListened, "
-                        + "SpotifyTrackID, SpotifyImageID)\n" +
-                        "VALUES('" + TrackName + "', '" + Genre + "', '" +
-                        Artist + "', '" + Length + "', " + 1 + ", '" +
-                        SpotifyTrackID + "', '" + SpotifyImageID + "'); "
-                        + "SELECT SCOPE_IDENTITY() AS NewTrackID";
-                
-                rs = SQLStatement.executeQuery(SQLQuery);
-                if (rs.next())
-                {
-                    TrackIDString = rs.getString("NewTrackID");
-                    TrackID = Integer.parseInt(TrackIDString);
-                } 
-            }
-            rs.close();
-            return TrackID;      
-        }
-        catch (SQLException err)
-        {
-            System.err.println("Error executing query");
-            err.printStackTrace(System.err);
-            return -1;
-        }
-    }
-    
     private static void AddTracksToPlaylist(int UserID, Statement SQLStatement)
     {
         try
@@ -1022,7 +973,54 @@ public class GeneratePlayLists
                 SQLStatement);
         return MoodID;
     }
-    
+    private static int AddTrack(String SpotifyTrackID, String SpotifyImageID, String TrackName,
+            String Genre, String Artist, String Length, Statement SQLStatement)
+    {
+        try
+        {
+            /*Verify that we haven't already inserted this record before.
+            If we have then just get the ID*/
+            String SQLQuery = "SELECT TrackID FROM MusicTrack WHERE TrackName = '"
+                    + TrackName + "'" ;
+            ResultSet rs = SQLStatement.executeQuery(SQLQuery);
+        
+            String TrackIDString = "-1";
+            if (rs.next())
+            {
+                TrackIDString = rs.getString("TrackID");
+            }    
+        
+            int TrackID = Integer.parseInt(TrackIDString);
+            if (TrackID == -1)
+            {
+                /*Create a new record in the MusicTrack table and get back the
+                ID of the newly inserted record. Set the
+                NumberOfTimesListened as 1*/
+                SQLQuery = "SET NOCOUNT ON; INSERT INTO MusicTrack (TrackName, "
+                        + "Genre, Artist, Length, NumberOfTimesListened, "
+                        + "SpotifyTrackID, SpotifyImageID)\n" +
+                        "VALUES('" + TrackName + "', '" + Genre + "', '" +
+                        Artist + "', '" + Length + "', " + 1 + ", '" +
+                        SpotifyTrackID + "', '" + SpotifyImageID + "'); "
+                        + "SELECT SCOPE_IDENTITY() AS NewTrackID";
+                
+                rs = SQLStatement.executeQuery(SQLQuery);
+                if (rs.next())
+                {
+                    TrackIDString = rs.getString("NewTrackID");
+                    TrackID = Integer.parseInt(TrackIDString);
+                } 
+            }
+            rs.close();
+            return TrackID;      
+        }
+        catch (SQLException err)
+        {
+            System.err.println("Error executing query");
+            err.printStackTrace(System.err);
+            return -1;
+        }
+    }
     public static String TrackEnded(String SpotifyTrackID, String MoodID,
             String AfterMood, String UserLiked, String DiaryEntryOne,
             String DiaryEntryTwo, String DiaryEntryThree, String UserID,
@@ -1046,5 +1044,5 @@ public class GeneratePlayLists
         {
             return "-1";
         } 
-    }
+    }   
 }
