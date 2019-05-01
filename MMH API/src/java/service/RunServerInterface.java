@@ -58,7 +58,8 @@ public class RunServerInterface
     {
         //In case the file read fails.
         String DefaultConnectionString =
-                "jdbc:sqlserver://137.154.147.62\\PE-KS1807\\SQLEXPRESS:1433;databaseName=MFMHDatabase_UAT";
+            "jdbc:sqlserver://58.173.109.195\\DESKTOP-TCQCV59\\SQLEXPRESS:1433;databaseName=MFMHDatabase_UAT";
+            //"jdbc:sqlserver://137.154.147.62\\PE-KS1807\\SQLEXPRESS:1433;databaseName=MFMHDatabase_UAT";
         
         //The name of the file to open. Note this is the following directory:
         //...\Glassfish\glassfish4\glassfish\domains\MMH\config\
